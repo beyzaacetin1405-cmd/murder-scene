@@ -1,0 +1,14 @@
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\DedektifOyunu.pdb
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\1.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\2.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\3.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\4.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\5.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\bg_gecekuclub.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\bg_liman.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\bg_malikane.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\Images\bg_otel.png
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\libAvaloniaNative.dylib
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\libHarfBuzzSharp.dylib
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\libSkiaSharp.dylib
+f:\Çetin Oyun\Yayim_Dosyalari\Mac_AppleSilicon\DedektifOyunu

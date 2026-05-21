@@ -1,0 +1,16 @@
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\DedektifOyunu.pdb
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\1.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\2.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\3.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\4.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\5.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\bg_gecekuclub.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\bg_liman.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\bg_malikane.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\Images\bg_otel.png
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\av_libglesv2.dll
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\libHarfBuzzSharp.dll
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\libHarfBuzzSharp.pdb
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\libSkiaSharp.dll
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\libSkiaSharp.pdb
+f:\Çetin Oyun\Yayim_Dosyalari\Windows\DedektifOyunu.exe
