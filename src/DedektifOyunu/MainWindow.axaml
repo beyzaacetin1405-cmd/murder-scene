@@ -1,0 +1,267 @@
+<Window xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        x:Class="DedektifOyunu.MainWindow"
+        Title="ARTHUR PENDELTON DAVASI — Bir Noir Dedektif Hikayesi"
+        Height="800" Width="1440" WindowStartupLocation="CenterScreen"
+        Background="#0a0a0f">
+
+    <Window.Styles>
+        <Style Selector="Button.danger">
+            <Setter Property="Background" Value="#c0392b"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.danger:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#e74c3c"/>
+        </Style>
+
+        <Style Selector="Button.ghost">
+            <Setter Property="Background" Value="#1e1e2e"/>
+            <Setter Property="Foreground" Value="#a0a0c0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#3a3a5a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.ghost:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#2a2a3e"/>
+        </Style>
+
+        <Style Selector="Button.gold">
+            <Setter Property="Background" Value="#b8860b"/>
+            <Setter Property="Foreground" Value="#0a0a0f"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="CornerRadius" Value="4"/>
+        </Style>
+        <Style Selector="Button.gold:pointerover /template/ ContentPresenter#PART_ContentPresenter">
+            <Setter Property="Background" Value="#daa520"/>
+        </Style>
+    </Window.Styles>
+
+    <Window.Resources>
+        <DataTemplate x:Key="SuspectCardTemplate">
+            <Button Command="{Binding $parent[Window].DataContext.InspectCharacterCommand}"
+                    CommandParameter="{Binding}"
+                    Width="175" Height="400" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="10">
+                <Border x:Name="CardBorder" Background="#12121e" CornerRadius="8"
+                        BorderBrush="#2a2a4a" BorderThickness="1">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="330"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Border Grid.Row="0" CornerRadius="8" ClipToBounds="True">
+                             <Image Source="{Binding ImagePath}" Stretch="UniformToFill" VerticalAlignment="Top"/>
+                        </Border>
+                        
+                        <Border Grid.Row="0" VerticalAlignment="Bottom" Height="80" CornerRadius="0,0,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0%,0%" EndPoint="0%,100%">
+                                    <GradientStop Color="#00000000" Offset="0"/>
+                                    <GradientStop Color="#ee0a0a0f" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel Grid.Row="1" Margin="12,8">
+                            <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding Title}" Foreground="#8888aa" FontSize="11" FontStyle="Italic" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="LocationButtonTemplate">
+            <Button Command="{Binding $parent[Window].DataContext.TravelCommand}"
+                    CommandParameter="{Binding}"
+                    Classes="ghost"
+                    Margin="0,0,0,6" HorizontalAlignment="Stretch">
+                <StackPanel HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="13"/>
+                    <TextBlock Text="{Binding AtmosphereDescription}" FontSize="10" Foreground="#666688" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="EvidenceItemTemplate">
+            <Border Background="#12121e" BorderBrush="#2a2a4a" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,6">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="#daa520" FontSize="13" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Description}" Foreground="#888899" FontSize="11" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Image Source="{Binding CurrentLocation.BackgroundImagePath}" Stretch="UniformToFill"/>
+        <Border>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0%,0%" EndPoint="100%,100%">
+                    <GradientStop Color="#dd0a0a12" Offset="0"/>
+                    <GradientStop Color="#bb050510" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!-- KATMAN 1: INTRO -->
+        <Grid IsVisible="{Binding IsIntroVisible}">
+            <Border Background="#ee050510"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="ÇETİN GAME STUDIO" Foreground="#666688" FontSize="14" FontFamily="Courier New" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                <TextBlock Text="Yapımcı: Beyza Çetin" Foreground="#444455" FontSize="11" FontFamily="Courier New" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="ARTHUR PENDELTON" Foreground="White" FontSize="72" FontWeight="Black" HorizontalAlignment="Center" FontFamily="Arial"/>
+                <TextBlock Text="D A V A S I" Foreground="#c0392b" FontSize="28" FontWeight="Light" HorizontalAlignment="Center" Margin="0,0,0,50"/>
+                <Border Background="#f5f0e8" Width="680" CornerRadius="3" Padding="50,40" BoxShadow="0 0 40 10 #80000000">
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                            <Border Background="#c0392b" Padding="8,4" CornerRadius="2" Margin="0,0,10,0">
+                                <TextBlock Text="GİZLİ" Foreground="White" FontSize="11" FontWeight="Black" FontFamily="Courier New"/>
+                            </Border>
+                            <TextBlock Text="PENDELTON CİNAYET DOSYASI — VAKA #1947" Foreground="#333" FontSize="13" FontFamily="Courier New" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Foreground="#2c2c2c" FontSize="17" FontFamily="Courier New" TextWrapping="Wrap" LineHeight="28">
+                            Mağdur: Arthur Pendelton, 58, sanayici.<LineBreak/>
+                            Ölüm sebebi: Nadir nörotoksin zehirlenmesi.<LineBreak/>
+                            Olay yeri: Pendelton Malikanesi, yatak odası.<LineBreak/>
+                            Tahmini ölüm saati: Gece 00:30 — 02:00.<LineBreak/><LineBreak/>
+                            Şüpheli sayısı: 10.<LineBreak/>
+                            Güvenilir tanık: Yok.<LineBreak/><LineBreak/>
+                            Dedektif, bu şehirde herkes bir şeyi gizliyor.<LineBreak/>
+                            Delilleri topla. İnsanları sorgula. Katili bul.
+                        </TextBlock>
+                        <Button Content="DOSYAYI AÇ — GÖREVE BAŞLA" Command="{Binding StartGameCommand}" Classes="danger" FontSize="18" Height="55" Margin="0,30,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- KATMAN 2: ANA KEŞİF -->
+        <Grid IsVisible="{Binding IsInvestigationVisible}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="#cc0a0a12" BorderBrush="#1e1e3a" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal" Margin="30,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentLocation.Name}" Foreground="White" FontSize="28" FontWeight="Black" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                        <Button Content="🔍  OLAY YERİNİ TARA" Command="{Binding SearchSceneCommand}" Classes="gold" FontSize="14" Height="40"/>
+                    </StackPanel>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding CurrentSuspects}" ItemTemplate="{StaticResource SuspectCardTemplate}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <Border Grid.Row="2" Background="#ee0a0a12" BorderBrush="#c0392b" BorderThickness="0,2,0,0">
+                    <Grid Margin="30,0">
+                        <TextBlock Text="{Binding GameMessage}" Foreground="#c8c8d8" FontSize="18" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="İTİBAR: " Foreground="#666688" FontSize="16"/>
+                            <TextBlock Text="{Binding PlayerReputation}" Foreground="#daa520" FontSize="20" FontWeight="Black"/>
+                            <TextBlock Text="/100" Foreground="#444466" FontSize="16"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Border Grid.Column="1" Background="#ee050510" BorderBrush="#1e1e3a" BorderThickness="1,0,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="BÖLGE HARİTASI" Foreground="#c0392b" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,16,0,8"/>
+                        <ItemsControl ItemsSource="{Binding Locations}" ItemTemplate="{StaticResource LocationButtonTemplate}"/>
+                        <TextBlock Text="DELİL ÇANTASI" Foreground="#4488ff" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,20,0,8"/>
+                        <ListBox ItemsSource="{Binding Inventory}" SelectedItem="{Binding SelectedEvidence}" ItemTemplate="{StaticResource EvidenceItemTemplate}" Background="Transparent" BorderThickness="0"/>
+                        <TextBlock Text="*Sorguda delil seçip Sun*" Foreground="#444466" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- KATMAN 3: SORGU MODU -->
+        <Grid IsVisible="{Binding IsFocusModeActive}">
+            <Border Background="#f0050510"/>
+            <Grid Margin="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <Border Width="320" Height="420" CornerRadius="4" BorderBrush="#c0392b" BorderThickness="2" BoxShadow="0 0 30 5 #66c0392b">
+                        <Image Source="{Binding SelectedSuspect.ImagePath}" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock Text="STRES SEVİYESİ — NABIZ" Foreground="#444466" FontSize="11" FontFamily="Courier New" FontWeight="Bold" Margin="0,16,0,6"/>
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding SelectedSuspect.StressLevel, Mode=OneWay}" Height="12" Background="#1a1a2a" BorderThickness="0" Foreground="#c0392b"/>
+                    <TextBlock Text="{Binding SelectedSuspect.StressLevel, StringFormat='Stres: \{0\}/100'}" Foreground="#666688" FontSize="11" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="40,0,40,0">
+                    <TextBlock Text="{Binding SelectedSuspect.Name}" Foreground="White" FontSize="52" FontWeight="Black" FontFamily="Arial"/>
+                    <TextBlock Text="{Binding SelectedSuspect.Title}" Foreground="#666688" FontSize="18" FontStyle="Italic" Margin="0,0,0,30"/>
+                    <Border Background="#0d0d1a" BorderBrush="#1e1e3a" BorderThickness="1" CornerRadius="8" Padding="30" MinHeight="160">
+                        <TextBlock Text="{Binding DisplayedDialogue}" Foreground="#d4d4e8" FontSize="24" TextWrapping="Wrap" FontFamily="Georgia" FontStyle="Italic"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
+                        <Button Content="⚡ BASKI YAP" Command="{Binding PressCommand}" Classes="ghost" Margin="0,0,10,0" Width="130"/>
+                        <Button Content="🤔 ŞÜPHELEN" Command="{Binding DoubtCommand}" Classes="ghost" Margin="0,0,10,0" Width="130"/>
+                        <Button Content="📁 DELİL SUN" Command="{Binding PresentEvidenceCommand}" Classes="gold" Margin="0,0,10,0" Width="150"/>
+                        <Button Content="🔒 TUTUKLA" Command="{Binding AccuseCommand}" Classes="danger" Margin="0,0,10,0" Width="150"/>
+                        <Button Content="← GERİ DÖN" Command="{Binding CloseFocusModeCommand}" Classes="ghost" Width="120"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding GameMessage}" Foreground="#888899" FontSize="14" FontStyle="Italic" Margin="0,16,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <Border Grid.Column="2" Background="#ee050510" BorderBrush="#1e1e3a" BorderThickness="1,0,0,0">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="DELİL ÇANTASI" Foreground="#4488ff" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,0,0,8"/>
+                        <ListBox ItemsSource="{Binding Inventory}" SelectedItem="{Binding SelectedEvidence}" ItemTemplate="{StaticResource EvidenceItemTemplate}" Background="Transparent" BorderThickness="0" MaxHeight="600"/>
+                        <TextBlock Text="*Sorgulamak için delil seç*" Foreground="#444466" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- KATMAN 4: SONUÇLAR -->
+        <Grid IsVisible="{Binding IsCaseSolvedVisible}">
+            <Border Background="#f0020805"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="VAKA ÇÖZÜLDÜ" Foreground="White" FontSize="80" FontWeight="Black" HorizontalAlignment="Center"/>
+                <TextBlock Text="{Binding GameMessage}" Foreground="#27ae60" FontSize="28" HorizontalAlignment="Center" Margin="0,20,0,40" TextWrapping="Wrap" MaxWidth="700" TextAlignment="Center"/>
+                <Button Content="🔄  YENİ DAVA BAŞLA" Command="{Binding RestartGameCommand}" Classes="gold" FontSize="20" Height="60" Width="300"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid IsVisible="{Binding IsGameOverVisible}">
+            <Border Background="#f0100000"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="ROZET BIRAKILDI" Foreground="#c0392b" FontSize="72" FontWeight="Black" HorizontalAlignment="Center"/>
+                <TextBlock Text="İtibarın bitti. Dedektiflik kariyerin sona erdi." Foreground="#888899" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,40"/>
+                <Button Content="🔄  TEKRAR DENE" Command="{Binding RestartGameCommand}" Classes="danger" FontSize="20" Height="60" Width="280"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>

@@ -1,0 +1,333 @@
+<Window x:Class="DedektifOyunu.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        mc:Ignorable="d"
+        Title="ARTHUR PENDELTON DAVASI — Bir Noir Dedektif Hikayesi"
+        Height="800" Width="1440" WindowStartupLocation="CenterScreen"
+        Background="#0a0a0f">
+
+    <Window.Resources>
+        <BooleanToVisibilityConverter x:Key="BoolToVis" />
+
+        <Style x:Key="DangerButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#c0392b"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#e74c3c"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GhostButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#1e1e2e"/>
+            <Setter Property="Foreground" Value="#a0a0c0"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="13"/>
+            <Setter Property="Padding" Value="14,8"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderBrush" Value="#3a3a5a"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#2a2a3e"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="GoldButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="#b8860b"/>
+            <Setter Property="Foreground" Value="#0a0a0f"/>
+            <Setter Property="FontWeight" Value="Black"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Padding" Value="16,10"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="4" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#daa520"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="SuspectCardTemplate">
+            <Button Command="{Binding DataContext.InspectCharacterCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"
+                    Width="175" Height="400" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="10">
+                <Border x:Name="CardBorder" Background="#12121e" CornerRadius="8"
+                        BorderBrush="#2a2a4a" BorderThickness="1">
+                    <Border.Effect>
+                        <DropShadowEffect Color="#c0392b" BlurRadius="0" Opacity="0" x:Name="CardGlow"/>
+                    </Border.Effect>
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="330"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <Image Source="{Binding ImagePath}" Stretch="UniformToFill"
+                               VerticalAlignment="Top" Grid.Row="0">
+                            <Image.Clip>
+                                <RectangleGeometry Rect="0,0,175,330" RadiusX="8" RadiusY="8"/>
+                            </Image.Clip>
+                        </Image>
+                        <Border Grid.Row="0" VerticalAlignment="Bottom" Height="80" CornerRadius="0,0,0,0">
+                            <Border.Background>
+                                <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+                                    <GradientStop Color="Transparent" Offset="0"/>
+                                    <GradientStop Color="#ee0a0a0f" Offset="1"/>
+                                </LinearGradientBrush>
+                            </Border.Background>
+                        </Border>
+                        <StackPanel Grid.Row="1" Margin="12,8">
+                            <TextBlock Text="{Binding Name}" Foreground="White" FontSize="14" FontWeight="Bold" TextTrimming="CharacterEllipsis"/>
+                            <TextBlock Text="{Binding Title}" Foreground="#8888aa" FontSize="11" FontStyle="Italic" TextTrimming="CharacterEllipsis" Margin="0,2,0,0"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+                <Button.Triggers>
+                    <EventTrigger RoutedEvent="MouseEnter">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="CardGlow" Storyboard.TargetProperty="BlurRadius" To="20" Duration="0:0:0.25"/>
+                                <DoubleAnimation Storyboard.TargetName="CardGlow" Storyboard.TargetProperty="Opacity" To="0.7" Duration="0:0:0.25"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                    <EventTrigger RoutedEvent="MouseLeave">
+                        <BeginStoryboard>
+                            <Storyboard>
+                                <DoubleAnimation Storyboard.TargetName="CardGlow" Storyboard.TargetProperty="BlurRadius" To="0" Duration="0:0:0.25"/>
+                                <DoubleAnimation Storyboard.TargetName="CardGlow" Storyboard.TargetProperty="Opacity" To="0" Duration="0:0:0.25"/>
+                            </Storyboard>
+                        </BeginStoryboard>
+                    </EventTrigger>
+                </Button.Triggers>
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="LocationButtonTemplate">
+            <Button Command="{Binding DataContext.TravelCommand, RelativeSource={RelativeSource AncestorType=Window}}"
+                    CommandParameter="{Binding}"
+                    Style="{StaticResource GhostButtonStyle}"
+                    Margin="0,0,0,6" HorizontalAlignment="Stretch">
+                <StackPanel HorizontalAlignment="Left">
+                    <TextBlock Text="{Binding Name}" FontWeight="Bold" FontSize="13"/>
+                    <TextBlock Text="{Binding AtmosphereDescription}" FontSize="10" Foreground="#666688" TextWrapping="Wrap" Margin="0,2,0,0"/>
+                </StackPanel>
+            </Button>
+        </DataTemplate>
+
+        <DataTemplate x:Key="EvidenceItemTemplate">
+            <Border Background="#12121e" BorderBrush="#2a2a4a" BorderThickness="1" CornerRadius="6" Padding="10" Margin="0,0,0,6">
+                <StackPanel>
+                    <TextBlock Text="{Binding Name}" Foreground="#daa520" FontSize="13" FontWeight="Bold"/>
+                    <TextBlock Text="{Binding Description}" Foreground="#888899" FontSize="11" TextWrapping="Wrap" Margin="0,3,0,0"/>
+                </StackPanel>
+            </Border>
+        </DataTemplate>
+    </Window.Resources>
+
+    <Grid>
+        <Image Source="{Binding CurrentLocation.BackgroundImagePath}" Stretch="UniformToFill"/>
+        <Border>
+            <Border.Background>
+                <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
+                    <GradientStop Color="#dd0a0a12" Offset="0"/>
+                    <GradientStop Color="#bb050510" Offset="1"/>
+                </LinearGradientBrush>
+            </Border.Background>
+        </Border>
+
+        <!-- KATMAN 1: INTRO -->
+        <Grid Visibility="{Binding IsIntroVisible, Converter={StaticResource BoolToVis}}">
+            <Border Background="#ee050510"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="ÇETİN GAME STUDIO" Foreground="#666688" FontSize="14" FontFamily="Courier New" HorizontalAlignment="Center" Margin="0,0,0,2"/>
+                <TextBlock Text="Yapımcı: Beyza Çetin" Foreground="#444455" FontSize="11" FontFamily="Courier New" HorizontalAlignment="Center" Margin="0,0,0,4"/>
+                <TextBlock Text="ARTHUR PENDELTON" Foreground="White" FontSize="72" FontWeight="Black" HorizontalAlignment="Center" FontFamily="Arial">
+                    <TextBlock.Effect><DropShadowEffect Color="#c0392b" BlurRadius="25" Opacity="0.6"/></TextBlock.Effect>
+                </TextBlock>
+                <TextBlock Text="D A V A S I" Foreground="#c0392b" FontSize="28" FontWeight="Light" HorizontalAlignment="Center" Margin="0,0,0,50"/>
+                <Border Background="#f5f0e8" Width="680" CornerRadius="3" Padding="50,40">
+                    <Border.Effect><DropShadowEffect Color="Black" BlurRadius="40" Opacity="0.5"/></Border.Effect>
+                    <StackPanel>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,20">
+                            <Border Background="#c0392b" Padding="8,4" CornerRadius="2" Margin="0,0,10,0">
+                                <TextBlock Text="GİZLİ" Foreground="White" FontSize="11" FontWeight="Black" FontFamily="Courier New"/>
+                            </Border>
+                            <TextBlock Text="PENDELTON CİNAYET DOSYASI — VAKA #1947" Foreground="#333" FontSize="13" FontFamily="Courier New" FontWeight="Bold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                        <TextBlock Foreground="#2c2c2c" FontSize="17" FontFamily="Courier New" TextWrapping="Wrap" LineHeight="28">
+                            Mağdur: Arthur Pendelton, 58, sanayici.<LineBreak/>
+                            Ölüm sebebi: Nadir nörotoksin zehirlenmesi.<LineBreak/>
+                            Olay yeri: Pendelton Malikanesi, yatak odası.<LineBreak/>
+                            Tahmini ölüm saati: Gece 00:30 — 02:00.<LineBreak/><LineBreak/>
+                            Şüpheli sayısı: 10.<LineBreak/>
+                            Güvenilir tanık: Yok.<LineBreak/><LineBreak/>
+                            Dedektif, bu şehirde herkes bir şeyi gizliyor.<LineBreak/>
+                            Delilleri topla. İnsanları sorgula. Katili bul.
+                        </TextBlock>
+                        <Button Content="DOSYAYI AÇ — GÖREVE BAŞLA" Command="{Binding StartGameCommand}" Style="{StaticResource DangerButtonStyle}" FontSize="18" Height="55" Margin="0,30,0,0"/>
+                    </StackPanel>
+                </Border>
+            </StackPanel>
+        </Grid>
+
+        <!-- KATMAN 2: ANA KEŞİF -->
+        <Grid Visibility="{Binding IsInvestigationVisible, Converter={StaticResource BoolToVis}}">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="300"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="80"/>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="80"/>
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Background="#cc0a0a12" BorderBrush="#1e1e3a" BorderThickness="0,0,0,1">
+                    <StackPanel Orientation="Horizontal" Margin="30,0" VerticalAlignment="Center">
+                        <TextBlock Text="{Binding CurrentLocation.Name}" Foreground="White" FontSize="28" FontWeight="Black" VerticalAlignment="Center" Margin="0,0,30,0"/>
+                        <Button Content="🔍  OLAY YERİNİ TARA" Command="{Binding SearchSceneCommand}" Style="{StaticResource GoldButtonStyle}" FontSize="14" Height="40"/>
+                    </StackPanel>
+                </Border>
+
+                <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Disabled" HorizontalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding CurrentSuspects}" ItemTemplate="{StaticResource SuspectCardTemplate}" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <ItemsControl.ItemsPanel><ItemsPanelTemplate><WrapPanel Orientation="Horizontal" HorizontalAlignment="Center"/></ItemsPanelTemplate></ItemsControl.ItemsPanel>
+                    </ItemsControl>
+                </ScrollViewer>
+
+                <Border Grid.Row="2" Background="#ee0a0a12" BorderBrush="#c0392b" BorderThickness="0,2,0,0">
+                    <Grid Margin="30,0">
+                        <TextBlock Text="{Binding GameMessage}" Foreground="#c8c8d8" FontSize="18" FontStyle="Italic" VerticalAlignment="Center" HorizontalAlignment="Left"/>
+                        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" VerticalAlignment="Center">
+                            <TextBlock Text="İTİBAR: " Foreground="#666688" FontSize="16"/>
+                            <TextBlock Text="{Binding PlayerReputation}" Foreground="#daa520" FontSize="20" FontWeight="Black"/>
+                            <TextBlock Text="/100" Foreground="#444466" FontSize="16"/>
+                        </StackPanel>
+                    </Grid>
+                </Border>
+            </Grid>
+
+            <Border Grid.Column="1" Background="#ee050510" BorderBrush="#1e1e3a" BorderThickness="1,0,0,0">
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="BÖLGE HARİTASI" Foreground="#c0392b" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,16,0,8"/>
+                        <ItemsControl ItemsSource="{Binding Locations}" ItemTemplate="{StaticResource LocationButtonTemplate}"/>
+                        <TextBlock Text="DELİL ÇANTASI" Foreground="#4488ff" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,20,0,8"/>
+                        <ListBox ItemsSource="{Binding Inventory}" SelectedItem="{Binding SelectedEvidence}" ItemTemplate="{StaticResource EvidenceItemTemplate}" Background="Transparent" BorderThickness="0"/>
+                        <TextBlock Text="*Sorguda delil seçip Sun*" Foreground="#444466" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </ScrollViewer>
+            </Border>
+        </Grid>
+
+        <!-- KATMAN 3: SORGU MODU -->
+        <Grid Visibility="{Binding IsFocusModeActive, Converter={StaticResource BoolToVis}}">
+            <Border Background="#f0050510"/>
+            <Grid Margin="40">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="350"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="300"/>
+                </Grid.ColumnDefinitions>
+
+                <StackPanel Grid.Column="0" VerticalAlignment="Center">
+                    <Border Width="320" Height="420" CornerRadius="4" BorderBrush="#c0392b" BorderThickness="2">
+                        <Border.Effect><DropShadowEffect Color="#c0392b" BlurRadius="30" Opacity="0.4"/></Border.Effect>
+                        <Image Source="{Binding SelectedSuspect.ImagePath}" Stretch="UniformToFill"/>
+                    </Border>
+                    <TextBlock Text="STRES SEVİYESİ — NABIZ" Foreground="#444466" FontSize="11" FontFamily="Courier New" FontWeight="Bold" Margin="0,16,0,6"/>
+                    <ProgressBar Minimum="0" Maximum="100" Value="{Binding SelectedSuspect.StressLevel, Mode=OneWay}" Height="12" Background="#1a1a2a" BorderThickness="0">
+                        <ProgressBar.Foreground>
+                            <LinearGradientBrush StartPoint="0,0" EndPoint="1,0">
+                                <GradientStop Color="#27ae60" Offset="0"/><GradientStop Color="#f39c12" Offset="0.6"/><GradientStop Color="#c0392b" Offset="1"/>
+                            </LinearGradientBrush>
+                        </ProgressBar.Foreground>
+                    </ProgressBar>
+                    <TextBlock Text="{Binding SelectedSuspect.StressLevel, StringFormat='Stres: %{0}/100'}" Foreground="#666688" FontSize="11" Margin="0,4,0,0"/>
+                </StackPanel>
+
+                <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="40,0,40,0">
+                    <TextBlock Text="{Binding SelectedSuspect.Name}" Foreground="White" FontSize="52" FontWeight="Black" FontFamily="Arial"/>
+                    <TextBlock Text="{Binding SelectedSuspect.Title}" Foreground="#666688" FontSize="18" FontStyle="Italic" Margin="0,0,0,30"/>
+                    <Border Background="#0d0d1a" BorderBrush="#1e1e3a" BorderThickness="1" CornerRadius="8" Padding="30" MinHeight="160">
+                        <TextBlock Text="{Binding DisplayedDialogue}" Foreground="#d4d4e8" FontSize="24" TextWrapping="Wrap" FontFamily="Georgia" FontStyle="Italic"/>
+                    </Border>
+                    <StackPanel Orientation="Horizontal" Margin="0,30,0,0">
+                        <Button Content="⚡ BASKI YAP" Command="{Binding PressCommand}" Style="{StaticResource GhostButtonStyle}" Margin="0,0,10,0" Width="130"/>
+                        <Button Content="🤔 ŞÜPHELEN" Command="{Binding DoubtCommand}" Style="{StaticResource GhostButtonStyle}" Margin="0,0,10,0" Width="130"/>
+                        <Button Content="📁 DELİL SUN" Command="{Binding PresentEvidenceCommand}" Style="{StaticResource GoldButtonStyle}" Margin="0,0,10,0" Width="150"/>
+                        <Button Content="🔒 TUTUKLA" Command="{Binding AccuseCommand}" Style="{StaticResource DangerButtonStyle}" Margin="0,0,10,0" Width="150"/>
+                        <Button Content="← GERİ DÖN" Command="{Binding CloseFocusModeCommand}" Style="{StaticResource GhostButtonStyle}" Width="120"/>
+                    </StackPanel>
+                    <TextBlock Text="{Binding GameMessage}" Foreground="#888899" FontSize="14" FontStyle="Italic" Margin="0,16,0,0" TextWrapping="Wrap"/>
+                </StackPanel>
+
+                <Border Grid.Column="2" Background="#ee050510" BorderBrush="#1e1e3a" BorderThickness="1,0,0,0">
+                    <StackPanel Margin="16">
+                        <TextBlock Text="DELİL ÇANTASI" Foreground="#4488ff" FontSize="12" FontWeight="Black" FontFamily="Courier New" Margin="0,0,0,8"/>
+                        <ListBox ItemsSource="{Binding Inventory}" SelectedItem="{Binding SelectedEvidence}" ItemTemplate="{StaticResource EvidenceItemTemplate}" Background="Transparent" BorderThickness="0" MaxHeight="600"/>
+                        <TextBlock Text="*Sorgulamak için delil seç*" Foreground="#444466" FontSize="10" TextWrapping="Wrap" Margin="0,4,0,0"/>
+                    </StackPanel>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <!-- KATMAN 4: SONUÇLAR -->
+        <Grid Visibility="{Binding IsCaseSolvedVisible, Converter={StaticResource BoolToVis}}">
+            <Border Background="#f0020805"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="VAKA ÇÖZÜLDÜ" Foreground="White" FontSize="80" FontWeight="Black" HorizontalAlignment="Center"><TextBlock.Effect><DropShadowEffect Color="#27ae60" BlurRadius="40" Opacity="0.7"/></TextBlock.Effect></TextBlock>
+                <TextBlock Text="{Binding GameMessage}" Foreground="#27ae60" FontSize="28" HorizontalAlignment="Center" Margin="0,20,0,40" TextWrapping="Wrap" MaxWidth="700" TextAlignment="Center"/>
+                <Button Content="🔄  YENİ DAVA BAŞLA" Command="{Binding RestartGameCommand}" Style="{StaticResource GoldButtonStyle}" FontSize="20" Height="60" Width="300"/>
+            </StackPanel>
+        </Grid>
+
+        <Grid Visibility="{Binding IsGameOverVisible, Converter={StaticResource BoolToVis}}">
+            <Border Background="#f0100000"/>
+            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
+                <TextBlock Text="ROZET BIRAKILDI" Foreground="#c0392b" FontSize="72" FontWeight="Black" HorizontalAlignment="Center"><TextBlock.Effect><DropShadowEffect Color="#c0392b" BlurRadius="40" Opacity="0.8"/></TextBlock.Effect></TextBlock>
+                <TextBlock Text="İtibarın bitti. Dedektiflik kariyerin sona erdi." Foreground="#888899" FontSize="24" HorizontalAlignment="Center" Margin="0,20,0,40"/>
+                <Button Content="🔄  TEKRAR DENE" Command="{Binding RestartGameCommand}" Style="{StaticResource DangerButtonStyle}" FontSize="20" Height="60" Width="280"/>
+            </StackPanel>
+        </Grid>
+    </Grid>
+</Window>
