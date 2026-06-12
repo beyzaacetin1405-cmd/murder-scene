@@ -20,3 +20,7 @@ Murder Scene, Unity ve C# kullanılarak geliştirilmiş dedektiflik temalı bir 
 ## 🎮 Oynanış
 
 Oyuncu, bir cinayet mahallinde dedektif rolünü üstlenir. Olay yerindeki kanıtları ve ipuçlarını inceleyerek şüpheli durumları analiz eder. Amaç, doğru ipuçlarını bir araya getirerek cinayetin arkasındaki gerçeği ortaya çıkarmaktır.
+
+## Çalıştırma
+murder-scene-main > src > DedektifOyunu > bin > Debug > net9.0-windows > DedektifOyunu.exe çift tık
+adımlarını izleyerek oyunu çalıştırabilirsiniz.
